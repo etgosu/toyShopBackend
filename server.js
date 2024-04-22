@@ -1,5 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+
+const MONGO_URI = 'mongodb://localhost:27017';
+mongoose.connect(MONGO_URI).then(result => console.log({result}));
 
 const app = express();
 app.use(cors())
