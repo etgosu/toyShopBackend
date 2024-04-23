@@ -2,11 +2,14 @@ const express = require('express');
 const cors = require('cors');
 
 const mongoose = require('mongoose');
-const MONGO_URI = 'mongodb://localhost:27017';
+const MONGO_URI = 'mongodb://localhost:27017/myshopdb';
 mongoose.connect(MONGO_URI).then(result => console.log({result}));
+
+const { Product } = require('../models/Product');
 
 const app = express();
 app.use(cors())
+app.use(express.json())
 
 app.get('/', function(req, res){
     // const resData =
@@ -45,6 +48,19 @@ app.listen(3000, function(){
 
 app.get('/login', function(req, res){
     return res.send('login page 3')
+})
+
+app.post('/product', async (req, res) =>{
+    try {
+            // console.log(req.body);
+            const product = new Product(req.body);
+            await product.save(); 
+            return res.send({ product })
+        
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ err:err.message });
+    }
 })
 
 app.get('/prodList', function(req, res){
