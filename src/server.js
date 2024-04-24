@@ -6,6 +6,8 @@ const MONGO_URI = 'mongodb://localhost:27017/myshopdb';
 mongoose.connect(MONGO_URI).then(result => console.log('DB connected'));
 
 const { Product } = require('../models/Product');
+const { Basket } = require('../models/Basket');
+const { Event } = require('../models/Event');
 
 const app = express();
 app.use(cors())
@@ -36,25 +38,75 @@ app.post('/product', async (req, res) =>{
     }
 })
 
-app.get('/prodList', async (req, res)=>{
-    const prodList = await Product.find();
-    return res.send({prodList});
+app.get('/prodList', async (req, res) => {
+    try {
+        const prodList = await Product.find();
+        return res.send({ prodList });
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ err: err.message });
+    }
+})
+app.get('/prodDetail/:prodNm', async (req, res) => {
+    try {
+        const { prodNm } = req.params;
+        const prod = await Product.findOne({ prodNm: prodNm })
+        return res.send({ prod });
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ err: err.message });
+    }
 })
 
-app.get('/prodDetail/:prodNm', async (req, res) =>{
-    const { prodNm } = req.params;
-    const prod = await Product.findOne({prodNm : prodNm})
-    return res.send({ prod })
-})
+app.get('/basketList', async (req, res) => {
+    try {
+        const basketList = await Basket.find();
+        return res.send({ basketList });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+    }
+});
 
-app.get('/basketList', function(req, res){
-    return res.send('basket List')
-})
+app.post('/basketList', async (req, res) => {
+    try {
+        const basketItem = new Basket(req.body); // Basket 모델을 사용하여 인스턴스 생성
+        await basketItem.save(); // 데이터베이스에 저장
+        return res.status(201).send({ message: 'Basket item successfully added', basketItem });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+    }
+});
 
-app.get('/mypage', function(req, res){
-    return res.send('mypage')
-})
+app.post('/mypage', async (req, res) => {
+    try {
+        const userInfo = await User.find({ userId: req.body.userId });
+        return res.send({ userInfo });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+    }
+});
 
-app.get('/eventList', function(req, res){
-    return res.send('event')
-})
+app.get('/eventList', async (req, res) => {
+    try {
+        const eventList = await Event.find();
+        return res.send({ eventList });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+    }
+});
+
+app.post('/eventList', async (req, res) => {
+    try {
+        const event = new Event(req.body); // Event 모델을 사용하여 인스턴스 생성
+        await event.save(); // 데이터베이스에 저장
+        return res.status(201).send({ message: 'Event successfully added', event });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+    }
+});
+
