@@ -1,4 +1,4 @@
-const Basket = require('../models/Basket'); // 모델 경로에 따라 수정해주세요.
+const Basket = require('../models/Basket'); 
 
 exports.createBasket = async (req, res) => {
     try {
