@@ -13,6 +13,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 const productRoutes = require('./routes/products');
+const basketRoutes= require('./routes/basket');
 
 app.get('/', function(req, res){
 
@@ -28,28 +29,9 @@ app.get('/login', function(req, res){
     return res.send('login page 3')
 })
 
-app.use('/products', productRoutes)
+app.use('/products', productRoutes);
+app.use('/basket', basketRoutes);
 
-app.get('/basketList', async (req, res) => {
-    try {
-        const basketList = await Basket.find();
-        return res.send({ basketList });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).send({ err: err.message });
-    }
-});
-
-app.post('/basketList', async (req, res) => {
-    try {
-        const basketItem = new Basket(req.body); // Basket 모델을 사용하여 인스턴스 생성
-        await basketItem.save(); // 데이터베이스에 저장
-        return res.status(201).send({ message: 'Basket item successfully added', basketItem });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).send({ err: err.message });
-    }
-});
 
 app.post('/mypage', async (req, res) => {
     try {
