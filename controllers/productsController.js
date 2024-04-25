@@ -1,4 +1,4 @@
-const Product = require('../models/Product'); // 모델 경로에 따라 수정해주세요.
+const Product = require('../models/Product');
 
 exports.createProduct = async (req, res) => {
     try {
