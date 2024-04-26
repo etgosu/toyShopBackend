@@ -1,4 +1,4 @@
-const Basket = require('../models/Basket'); // 모델 경로에 따라 수정해주세요.
+const Basket = require('../models/Basket'); 
 const User = require('../models/User');
 const Product= require('../models/Product');
 
@@ -9,7 +9,7 @@ exports.createBasket = async (req, res) => {
         const prod = await Product.findOne({prodCd: prodCd});
         const basketItem = new Basket({
             ...req.body,
-            userId:user._id, 
+            userId: user._id, 
             prodCd: prod._id
         }); // Basket 모델을 사용하여 인스턴스 생성
         await basketItem.save(); // 데이터베이스에 저장
@@ -22,7 +22,10 @@ exports.createBasket = async (req, res) => {
 
 exports.listBaskets = async (req, res) => {
     try {
-        const basketList = await Basket.find({}, '-__v');
+        const {userNm} = req.body;
+        const user = await User.findOne({userNm:userNm});
+        const basketList = await Basket.findOne({userId: user._id}, '-__v -_id').populate('userId','userNm').populate('prodCd','prodNm price');
+        //To-do : 상품명과 유저이름을 같이 조회 할수 있도록 변경필요.
         return res.send({ basketList });
     } catch (err) {
         console.log(err);
