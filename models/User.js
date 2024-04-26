@@ -20,15 +20,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
     lastLoginAt: Date,
     dormancyConversionDate: Date
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = { User };
+module.exports = User;
 
