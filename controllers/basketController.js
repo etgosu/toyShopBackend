@@ -24,8 +24,20 @@ exports.listBaskets = async (req, res) => {
     try {
         const {userNm} = req.body;
         const user = await User.findOne({userNm:userNm});
-        const basketList = await Basket.findOne({userId: user._id}, '-__v -_id').populate('userId','userNm').populate('prodCd','prodNm price');
-        //To-do : 상품명과 유저이름을 같이 조회 할수 있도록 변경필요.
+        const basketList = await Basket.findOne({userId: user._id}).populate('userId','userNm').populate('prodCd','prodNm price');
+        return res.send({ basketList });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+    }
+};
+
+exports.deleteBasket= async (req, res) => {
+    try {
+        const {userNm, basketId} = req.body;
+        const user = await User.findOne({userNm:userNm});
+        const basketList = await Basket.deleteOne({userId: user._id, _id:basketId}).populate('userId','userNm').populate('prodCd','prodNm price');
+
         return res.send({ basketList });
     } catch (err) {
         console.log(err);
