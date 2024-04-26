@@ -8,12 +8,15 @@ mongoose.connect(MONGO_URI).then(result => console.log('DB connected'));
 const { Product } = require('./models/Product');
 const { Basket } = require('./models/Basket');
 const { Event } = require('./models/Event');
+const { User } = require('./models/User');
 
 const app = express();
 app.use(cors())
 app.use(express.json())
 const productRoutes = require('./routes/products');
 const basketRoutes= require('./routes/basket');
+const userRoutes= require('./routes/user');
+
 
 app.get('/', function(req, res){
 
@@ -31,6 +34,7 @@ app.get('/login', function(req, res){
 
 app.use('/products', productRoutes);
 app.use('/basket', basketRoutes);
+app.use('/users', userRoutes);
 
 
 app.post('/mypage', async (req, res) => {
