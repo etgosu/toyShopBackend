@@ -22,9 +22,10 @@ exports.createBasket = async (req, res) => {
 
 exports.listBaskets = async (req, res) => {
     try {
-        const {userNm} = req.body;
+        const userNm = req.query.userNm;
         const user = await User.findOne({userNm:userNm});
-        const basketList = await Basket.findOne({userId: user._id}).populate('userId','userNm').populate('prodCd','prodNm price');
+        const basketList = await Basket.findOne({userId: user._id}).populate('userInfo').populate('prodInfo');
+
         return res.send({ basketList });
     } catch (err) {
         console.log(err);
@@ -37,7 +38,7 @@ exports.deleteBasket= async (req, res) => {
         const {userNm, basketId} = req.body;
         const user = await User.findOne({userNm:userNm});
         const basketList = await Basket.deleteOne({userId: user._id, _id:basketId}).populate('userId','userNm').populate('prodCd','prodNm price');
-
+ 
         return res.send({ basketList });
     } catch (err) {
         console.log(err);
