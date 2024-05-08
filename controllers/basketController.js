@@ -24,7 +24,7 @@ exports.listBaskets = async (req, res) => {
     try {
         const userNm = req.query.userNm;
         const user = await User.findOne({userNm:userNm});
-        const basketList = await Basket.findOne({userId: user._id}).populate('userInfo').populate('prodInfo');
+        const basketList = await Basket.find({userId: user._id}).populate('userInfo').populate('prodInfo');
 
         return res.send({ basketList });
     } catch (err) {
