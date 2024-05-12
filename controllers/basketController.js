@@ -35,7 +35,8 @@ exports.listBaskets = async (req, res) => {
 
 exports.deleteBasket= async (req, res) => {
     try {
-        const {userNm, basketId} = req.body;
+        const {basketId} = req.params;
+        const {userNm} = req.body;
         const user = await User.findOne({userNm:userNm});
         const basketList = await Basket.deleteOne({userId: user._id, _id:basketId}).populate('userId','userNm').populate('prodCd','prodNm price');
  
