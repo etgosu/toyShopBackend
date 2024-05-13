@@ -16,6 +16,7 @@ app.use(express.json())
 const productRoutes = require('./routes/products');
 const basketRoutes= require('./routes/basket');
 const userRoutes= require('./routes/user');
+const purchaseRoutes= require('./routes/purchase');
 
 
 app.get('/', function(req, res){
@@ -35,6 +36,7 @@ app.get('/login', function(req, res){
 app.use('/products', productRoutes);
 app.use('/basket', basketRoutes);
 app.use('/users', userRoutes);
+app.use('/purchase', purchaseRoutes);
 
 
 app.post('/mypage', async (req, res) => {
