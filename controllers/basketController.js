@@ -4,7 +4,7 @@ const Product= require('../models/Product');
 
 exports.createBasket = async (req, res) => {
     try {
-        const {userId , prodCd } = req.body;
+        const {userId , prodCd } = req.body; 
         const user = await User.findOne({userId:userId});
         const prod = await Product.findOne({prodCd: prodCd});
         const basketItem = new Basket({
